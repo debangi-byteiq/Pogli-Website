@@ -19,6 +19,21 @@
   }
 }
 
+/* Navbar Style */
+/* @layer utilities {
+  .clip-left {
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+  }
+
+  .clip-middle {
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+  }
+
+  .clip-right {
+    clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+} */
+
 body {
   background: var(--background);
   color: var(--foreground);
