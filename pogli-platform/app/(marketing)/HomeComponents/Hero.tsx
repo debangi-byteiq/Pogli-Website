@@ -1,100 +1,79 @@
-// "use client";
-// import React from "react";
-
-// interface HeroSectionProps {
-//   image?: string;
-// }
-
-// export default function Hero({ image }: HeroSectionProps) {
-//   return (
-//     <section className="relative min-h-screen w-full overflow-hidden
-//                         bg-gradient-to-br from-[#4C5BD4] via-[#3B82F6] to-[#38BDF8] text-white">
-
-//       {/* LEFT CONTENT */}
-//       <div className="flex flex-col justify-center h-full px-8 sm:px-16 lg:px-24 max-w-3xl">
-
-//         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 pt-59">
-//           We Connect Dot!
-//         </h1>
-
-//         <p className="text-base sm:text-lg lg:text-2xl text-white/90 max-w-lg mb-10 leading-relaxed pt-7">
-//           Pioneering the future of Japan-India business <br />through strategy and technology
-//         </p>
-
-//         <div className="flex flex-col sm:flex-row gap-4 pt-7">
-
-//           <button className="px-8 py-3 bg-indigo-900 hover:bg-indigo-800
-//                              text-white font-medium rounded-md shadow-md
-//                              transition-all duration-300">
-//             Materials
-//           </button>
-
-//           <button className="px-8 py-3 border border-white
-//                              text-white font-medium rounded-md
-//                              hover:bg-white hover:text-indigo-900
-//                              transition-all duration-300">
-//             Contact Us
-//           </button>
-
-//         </div>
-//       </div>
-
-//       {/* FLOATING RIGHT IMAGE */}
-//       <div className="hidden lg:block absolute top-16 right-10
-//                       w-[50%] h-[95%] bg-gray-300 shadow-xl rounded-sm overflow-hidden mt-10">
-
-//         {image ? (
-//           <img
-//             src={image}
-//             alt="Hero"
-//             className="w-full h-full object-cover"
-//           />
-//         ) : (
-//           <div className="flex items-center justify-center h-full">
-//             <p className="text-gray-500">Image placeholder</p>
-//           </div>
-//         )}
-//       </div>
-
-//     </section>
-//   );
-// }
-
 import React from "react";
 import Link from "next/link";
+import { Boxes } from "lucide-react";
 
 const Hero = () => {
+	const cards = [1, 2, 3, 4, 5];
 	return (
-		<section className="w-full h-200 bg-gradient-to-r from-[#4A5ACD] to-[#19B5F3] px-6 md:px-12 py-10">
-			<div className="max-w-[1600px] mx-auto grid md:grid-cols-2 gap-5 items-center">
-				{/* Left Content */}
-				<div className="text-white flex flex-col justify-start h-full ml-40 mt-90">
-					<h2 className="text-5xl md:text-6xl font-bold mb-15">
-						We Connect Dot!
-					</h2>
-
-					<p className="text-xl md:text-2xl leading-relaxed mb-15">
-						Pioneering the future of Japan–India business
+		<section className="bg-gradient-to-r  from-[#2c3f8f] via-[#355aa0] to-[#2c3f8f] text-white py-20 px-6 md:px-16 overflow-hidden">
+			<div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+				{/* LEFT CONTENT */}
+				<div>
+					<h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
+						私たちは、
 						<br />
-						through strategy and technology
+						点と点をつなぐ！
+					</h1>
+
+					<p className="text-lg text-white/80 mb-8">
+						戦略とテクノロジーを通じて、
+						<br />
+						日印ビジネスの未来を切り拓く。
 					</p>
 
 					{/* Buttons */}
-					<div className="flex flex-col sm:flex-row gap-4">
-						<button className="bg-[#253A9B] hover:bg-[#1b2b77] px-14 py-4 text-xl font-semibold transition">
-							Materials
+					<div className="flex gap-4">
+						<button className="bg-white text-blue-900 px-6 py-3 rounded-full font-semibold">
+							当社の素材
 						</button>
 
-						<Link href="/contact">
-							<button className="border border-white px-14 py-4 text-xl font-semibold hover:bg-white hover:text-[#253A9B] transition">
-								Contact Us
-							</button>
-						</Link>
+						<button className="border border-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-900 transition">
+							お問い合わせ
+						</button>
 					</div>
 				</div>
 
-				{/* Right Box */}
-				<div className="w-full h-[900px] bg-gray-300"></div>
+				{/* RIGHT IMAGE + FLOATING CARDS */}
+				<div className="relative">
+					{/* Image Container */}
+					<div className="rounded-2xl overflow-hidden border border-white/20 ">
+						<img
+							src="/hero-img-2.jpg" // put your image in public folder
+							alt="hero"
+							className="w-full h-[440px] object-cover opacity-30 "
+						/>
+					</div>
+
+					{/* Floating Cards */}
+					<div className="hidden md:block absolute top-0 left-1/2 -translate-x-[70%] w-full max-w-3xl pointer-events-none">
+						{cards.map((_, i) => {
+							const positions = [
+								{ top: "20px", left: "0%" },
+								{ top: "100px", left: "15%" },
+								{ top: "180px", left: "30%" },
+								{ top: "260px", right: "15%" },
+								{ top: "340px", right: "30%" },
+							];
+
+							return (
+								<div
+									key={i}
+									className="absolute bg-white text-black rounded-lg px-4 py-3 flex items-center gap-3 w-[70%] shadow-md"
+									style={positions[i]}
+								>
+									<div className="w-10 h-10 bg-blue-900 text-white rounded-md flex items-center justify-center">
+										<Boxes size={18} />
+									</div>
+
+									<div>
+										<p className="font-semibold text-sm">ニュースの見出し</p>
+										<p className="text-xs text-gray-500">ニュース小見出し</p>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</div>
 			</div>
 		</section>
 	);

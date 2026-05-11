@@ -1,139 +1,303 @@
-// "use client";
-
-// import React, { useState } from 'react';
-// import { Menu, X } from 'lucide-react';
-
-// export default function Navbar() {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   const toggleMenu = () => {
-//     setIsOpen(!isOpen);
-//   };
-
-//   const navLinks = [
-//     { label: 'Why India?', href: '#why-india' },
-//     { label: 'Service', href: '#service' },
-//     { label: 'News', href: '#news' },
-//     { label: 'Company', href: '#company' },
-//   ];
-
-//   return (
-//     <nav className="sticky top-0 z-50 bg-white shadow-md">
-//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//         <div className="flex justify-between items-center h-16">
-//           {/* Logo */}
-//           <div className="flex-shrink-0">
-//             <span className="text-2xl font-bold text-indigo-900">POGLI</span>
-//           </div>
-
-//           {/* Desktop Navigation */}
-//           <div className="hidden md:flex items-center space-x-8">
-//             {navLinks.map((link) => (
-//               <a
-//                 key={link.label}
-//                 href={link.href}
-//                 className="text-gray-700 hover:text-cyan-500 font-medium transition-colors duration-300"
-//               >
-//                 {link.label}
-//               </a>
-//             ))}
-//           </div>
-
-//           {/* Desktop Buttons */}
-//           <div className="hidden md:flex items-center space-x-3">
-//             <button className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded transition-colors duration-300">
-//               Materials
-//             </button>
-//             <button className="px-6 py-2 bg-indigo-900 hover:bg-indigo-800 text-white font-semibold rounded transition-colors duration-300">
-//               Contact Us
-//             </button>
-//           </div>
-
-//           {/* Mobile Menu Button */}
-//           <div className="md:hidden">
-//             <button
-//               onClick={toggleMenu}
-//               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-cyan-500 focus:outline-none"
-//             >
-//               {isOpen ? (
-//                 <X size={24} />
-//               ) : (
-//                 <Menu size={24} />
-//               )}
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Mobile Navigation */}
-//       {isOpen && (
-//         <div className="md:hidden bg-white border-t border-gray-200">
-//           <div className="px-2 pt-2 pb-3 space-y-1">
-//             {navLinks.map((link) => (
-//               <a
-//                 key={link.label}
-//                 href={link.href}
-//                 className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 hover:text-cyan-500 font-medium transition-colors duration-300"
-//                 onClick={() => setIsOpen(false)}
-//               >
-//                 {link.label}
-//               </a>
-//             ))}
-//             <div className="flex flex-col space-y-2 mt-4 px-3">
-//               <button className="w-full px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded transition-colors duration-300">
-//                 Materials
-//               </button>
-//               <button className="w-full px-4 py-2 bg-indigo-900 hover:bg-indigo-800 text-white font-semibold rounded transition-colors duration-300">
-//                 Contact Us
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </nav>
-//   );
-// }
-
-import React from "react";
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
+	const pathname = usePathname();
+	const [open, setOpen] = useState(false);
+	const [aboutOpen, setAboutOpen] = useState(false);
+	const [servicesOpen, setServicesOpen] = useState(false);
+	const [othersOpen, setOthersOpen] = useState(false);
+
+	const aboutDropdownRef = useRef<HTMLDivElement>(null);
+	const servicesDropdownRef = useRef<HTMLDivElement>(null);
+	const othersDropdownRef = useRef<HTMLDivElement>(null);
+
+	const navLinks = [
+		{ name: "HOME", href: "/" },
+		{ name: "ABOUT US", href: "/about" },
+		{ name: "SERVICES", href: "/services" },
+		{ name: "WHY INDIA?", href: "/why-india" },
+		{ name: "OTHERS", href: "/others" },
+	];
+	
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				aboutDropdownRef.current &&
+				event.target instanceof Node &&
+				!aboutDropdownRef.current.contains(event.target)
+			) {
+				setAboutOpen(false);
+			}
+
+			if (
+				servicesDropdownRef.current &&
+				event.target instanceof Node &&
+				!servicesDropdownRef.current.contains(event.target)
+			) {
+				setServicesOpen(false);
+			}
+
+			if (
+				othersDropdownRef.current &&
+				event.target instanceof Node &&
+				!othersDropdownRef.current.contains(event.target)
+			) {
+				setOthersOpen(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
+
 	return (
-		<nav className="w-full bg-white px-8 md:px-20 py-6 shadow-sm">
-			<div className="max-w-[1600px] mx-auto flex items-center justify-start gap-20">
+		<header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+			<div className="max-w-7xl mx-auto px-6 md:px-3 py-4 flex items-center justify-between">
 				{/* Logo */}
-				<div>
-					<Link href="/">
-						<img
-						src="/nav-logo.png"
-						alt="Pogli Logo"
-						className="w-[230px] h-auto"
-					/>
-					</Link>
-				</div>
+				<img src="/nav-logo.png" alt="logo" className="h-13 w-auto" />
 
-				{/* Nav Links */}
-				<div className="hidden md:flex items-center gap-14 text-[#2E3E9E] text-xl font-medium ml-65">
-					<a href="#">Why India?</a>
-					<a href="#">Service</a>
-					<a href="#">News</a>
-					<a href="#">Company</a>
-				</div>
+				<nav className="hidden md:flex items-center gap-8 relative">
+					{navLinks.map((link) => {
+						// ABOUT DROPDOWN
+						if (link.name === "ABOUT US") {
+							return (
+								<div key={link.name} className="relative" ref={aboutDropdownRef}>
+									<button
+										onClick={() => setAboutOpen(!aboutOpen)}
+										className={`text-sm font-medium tracking-wide ${
+											pathname.startsWith("/about")
+												? "text-blue-900"
+												: "text-gray-700 hover:text-blue-900"
+										}`}
+									>
+										{link.name}
+									</button>
 
-				{/* Buttons */}
-				<div className="hidden md:flex items-center gap-6">
-					<button className="bg-[#18A8F2] hover:bg-[#1095d9] text-white px-12 py-4 text-xl font-semibold rounded-sm">
-						Materials
+									{aboutOpen && (
+										<div className="text-black absolute top-10 left-0 w-60 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+											{[
+												{ name: "WHAT WE DO", href: "/about/what-we-do" },
+												{
+													name: "MISSION / VISION",
+													href: "/about/mission-vision",
+												},
+												{ name: "OUR VALUES", href: "/about/values" },
+												{ name: "POGLI MEMBERS", href: "/about/members" },
+												{
+													name: "COMPANY PROFILE",
+													href: "/about/company-profile",
+												},
+											].map((item) => {
+												const isActive = pathname.startsWith(item.href);
+
+												return (
+													<Link
+														key={item.name}
+														href={item.href}
+														onClick={() => setAboutOpen(false)}
+														className={`block px-5 py-3 text-sm transition ${
+															isActive
+																? "bg-blue-100 text-blue-900 font-medium"
+																: "text-gray-700 hover:bg-gray-100"
+														}`}
+													>
+														{item.name}
+													</Link>
+												);
+											})}
+										</div>
+									)}
+								</div>
+							);
+						}
+
+						if (link.name === "SERVICES") {
+							return (
+								<div
+									key={link.name}
+									className="relative"
+									ref={servicesDropdownRef}
+								>
+									<button
+										onClick={() => setServicesOpen(!servicesOpen)}
+										className={`text-sm font-medium tracking-wide ${
+											pathname.startsWith("/services")
+												? "text-blue-900"
+												: "text-gray-700 hover:text-blue-900"
+										}`}
+									>
+										{link.name}
+									</button>
+
+									{servicesOpen && (
+										<div className="absolute top-10 left-0 w-72 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+											{[
+												{
+													name: "NEW BUSINESS CREATION",
+													href: "/services/new-business",
+												},
+												{
+													name: "P-I CUBE",
+													href: "/services/picube",
+												},
+												{
+													name: "DX SOLUTIONS",
+													href: "/services/dx-solutions",
+												},
+												{
+													name: "OTHER SERVICES",
+													href: "/services/other-services",
+												},
+											].map((item) => {
+												const isActive = pathname.startsWith(item.href);
+
+												return (
+													<Link
+														key={item.name}
+														href={item.href}
+														onClick={() => setServicesOpen(false)}
+														className={`block px-6 py-4 text-sm tracking-wide transition ${
+															isActive
+																? "bg-blue-100 text-blue-900 font-medium"
+																: "text-[#2f43a0] hover:bg-gray-100"
+														}`}
+													>
+														{item.name}
+													</Link>
+												);
+											})}
+										</div>
+									)}
+								</div>
+							);
+						}
+
+						if (link.name === "OTHERS") {
+							return (
+								<div
+									key={link.name}
+									className="relative"
+									ref={othersDropdownRef}
+								>
+									<button
+										onClick={() => setOthersOpen(!othersOpen)}
+										className={`text-sm font-medium tracking-wide ${
+											pathname.startsWith("/others")
+												? "text-blue-900"
+												: "text-gray-700 hover:text-blue-900"
+										}`}
+									>
+										{link.name}
+									</button>
+
+									{othersOpen && (
+										<div className="absolute top-10 left-0 w-72 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+											{[
+												{
+													name: "BLOGS/NEWS",
+													href: "/others/blogs",
+												},
+												{
+													name: "MATERIAL REQUEST",
+													href: "/others/material-request",
+												},
+												{
+													name: "CONTACT US",
+													href: "/others/contact",
+												},
+											].map((item) => {
+												const isActive = pathname.startsWith(item.href);
+
+												return (
+													<Link
+														key={item.name}
+														href={item.href}
+														onClick={() => setOthersOpen(false)}
+														className={`block px-6 py-4 text-sm tracking-wide transition ${
+															isActive
+																? "bg-blue-100 text-blue-900 font-medium"
+																: "text-[#2f43a0] hover:bg-gray-100"
+														}`}
+													>
+														{item.name}
+													</Link>
+												);
+											})}
+										</div>
+									)}
+								</div>
+							);
+						}
+									
+
+						// NORMAL LINKS
+						return (
+							<Link
+								key={link.name}
+								href={link.href}
+								className={`text-sm font-medium tracking-wide relative ${
+									pathname === link.href
+										? "text-blue-900"
+										: "text-gray-700 hover:text-blue-900"
+								}`}
+							>
+								{link.name}
+
+								{pathname === link.href && (
+									<span className="absolute left-0 -bottom-1 w-full h-[2px] bg-blue-900"></span>
+								)}
+							</Link>
+						);
+					})}
+				</nav>
+
+				{/* Desktop Button */}
+				<div className="hidden md:block">
+					<button className="bg-[#3b4ba3] hover:bg-[#2f3d85] text-white h-12 px-5 py-3 mx-5 rounded-md text-3sm font-medium transition">
+						Get Started
 					</button>
-
-					<Link href="/contact">
-						<button className="bg-[#2E3E9E] hover:bg-[#25338a] text-white px-12 py-4 text-xl font-semibold rounded-sm">
-							Contact Us
-						</button>
-					</Link>
 				</div>
+
+				{/* Mobile Menu Button */}
+				<button
+					className="md:hidden text-blue-900"
+					onClick={() => setOpen(!open)}
+				>
+					{open ? <X size={28} /> : <Menu size={28} />}
+				</button>
 			</div>
-		</nav>
+
+			{/* Mobile Menu */}
+			{open && (
+				<div className="md:hidden bg-white px-6 py-6 space-y-4 shadow-md">
+					{navLinks.map((link) => (
+						<Link
+							key={link.name}
+							href={link.href}
+							onClick={() => setOpen(false)}
+							className={`block text-base font-medium ${
+								pathname === link.href ? "text-blue-900" : "text-gray-700"
+							}`}
+						>
+							{link.name}
+						</Link>
+					))}
+
+					{/* Mobile CTA */}
+					<button className="w-full mt-4 bg-[#3b4ba3] text-white py-3 rounded-md font-medium">
+						Get Started
+					</button>
+				</div>
+			)}
+		</header>
 	);
 };
 
